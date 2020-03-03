@@ -17,41 +17,48 @@
   <body>
     <script type="text/javascript">
       $(document).ready(function () {
-        var randomStrings = [
-          "Arrays are list-like objects whose prototype has methods to perform traversal and mutation operations. Neither the length of a JavaScript array nor the types of its elements are fixed. Since an array's length can change at any time, and data can be stored at non-contiguous locations in the array, JavaScript arrays are not guaranteed to be dense; this depends on how the programmer chooses to use them. In general, these are convenient characteristics; but if these features are not desirable for your particular use, you might consider using typed arrays.",
-          "Given a connected and undirected graph, a spanning tree of that graph is a subgraph that is a tree and connects all the vertices together. A single graph can have many different spanning trees. A minimum spanning tree (MST) or minimum weight spanning tree for a weighted, connected and undirected graph is a spanning tree with weight less than or equal to the weight of every other spanning tree. The weight of a spanning tree is the sum of weights given to each edge of the spanning tree.",
-          "We have discussed Kruskal’s algorithm for Minimum Spanning Tree. Like Kruskal’s algorithm, Prim’s algorithm is also a Greedy algorithm. It starts with an empty spanning tree. The idea is to maintain two sets of vertices. The first set contains the vertices already included in the MST, the other set contains the vertices not yet included. At every step, it considers all the edges that connect the two sets, and picks the minimum weight edge from these edges. After picking the edge, it moves the other endpoint of the edge to the set containing MST."
-        ]
-        $("#random-text").html(randomStrings[Math.floor(Math.random() * (randomStrings.length))])
-        var keydowntimestamp;
-        var keyuptimestamp;
-        var keydowncount = 0;
-        var keypressedafterdiff = 0;
-        $("#text-area").keydown(function(e) {
-        	if(keyuptimestamp) {
-        		keypressedafterdiff = new Date().getTime() - keyuptimestamp;
-	            keyuptimestamp = null
-        	}
-        	if(!keydowntimestamp) {
-        		keydowntimestamp = new Date().getTime()
-        	}
-        	keydowncount++;
-        });
+        var eventCapture = new Array();
+        var monitor = function(id) {
+        	var keydowntimestamp;
+	        var keyuptimestamp;
+	        var keydowncount = 0;
+	        var keypressedafterdiff = 0;
+	        $(id).keydown(function(e) {
+	        	if(keyuptimestamp) {
+	        		keypressedafterdiff = new Date().getTime() - keyuptimestamp;
+		            keyuptimestamp = null
+	        	}
+	        	if(!keydowntimestamp) {
+	        		keydowntimestamp = new Date().getTime()
+	        	}
+	        	keydowncount++;
+	        });
 
-        $("#text-area").keyup(function(e) { 
-        	if(keydowntimestamp) {
-        		var diff = new Date().getTime() - keydowntimestamp;
-        		console.log("Key pressed: " + e.key + " @ location: " + event.keyCode + " and Timestamp: " + Date.now());
-        		console.log("Key pressed after: " + keypressedafterdiff + " ms");
-            	console.log("Key hold time: " + diff + " ms");
-            	console.log("Key pressed for: " + keydowncount + " times");
-            	keydowncount = 0;
-            	keydowntimestamp = null
-        	}
-            if(!keyuptimestamp) {
-        		keyuptimestamp = new Date().getTime()
-        	}
-        });
+	        $(id).keyup(function(e) { 
+	        	if(keydowntimestamp) {
+	        		var diff = new Date().getTime() - keydowntimestamp;
+	        		var event = {
+	        			"id": id, // Text Area
+	        			"keyPressed": e.key, // Key Name
+	        			"location": e.keyCode, // Key Code
+	        			"pressedAfter": keypressedafterdiff, // Key pressed after
+	        			"holdFor": diff, // Key hold down for
+	        			"longPressedEquivalent": keydowncount, // key long pressed equivalent for number of times that key has been pressed.
+	        			"platform": navigator.platform, // Get platform OS+Processor
+	        		};
+	        		console.log(event)
+	        		eventCapture.push(event)
+	            	keydowncount = 0;
+	            	keydowntimestamp = null
+	        	}
+	            if(!keyuptimestamp) {
+	        		keyuptimestamp = new Date().getTime()
+	        	}
+	        });
+        }
+        monitor("#text-area-1")
+        monitor("#text-area-2")
+        monitor("#text-area-3")
       });
     </script>
 
@@ -61,17 +68,45 @@
         </div>
         <span class="row justify-content-center">A new form of Biometric Identity</span>
         <div class="row justify-content-center" style="margin-top: 30px; text-align: justify;">
-          <form class="col-xs-8 col-sm-8 col-md-10" id="urlForm" method="GET">
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">@</span>
-              </div>
-              <input type="text" class="form-control" placeholder="Name" aria-label="Username" aria-describedby="basic-addon1">
-            </div>
-            <span id="random-text" class="row justify-content-center" style="margin-bottom: 30px;"></span>
-            <textarea class="form-control" id="text-area" aria-label="With textarea"></textarea>
-          </form>
+          
         </div>
+        <div class="card border-dark mb-3">
+		  <div class="card-header">Generate KeyStroke Identity</div>
+		  <div class="card-body text-dark">
+		    <p class="card-text">
+		    	<form id="dataset-form" method="POST">
+				  <div class="form-group">
+				    <label for="name">Name:</label>
+				    <input type="text" class="form-control" id="name" placeholder="Enter Name">
+				  </div>
+				  <div class="form-group">
+				    <label for="device-select">Device Type:</label>
+				    <select class="form-control" id="device-select">
+						<option>Computer/Laptop</option>
+				    	<option>Mobile/Tab</option>
+				    </select>
+				  </div>
+				  <div class="form-group">
+				  	<label for="text-area-1">Arrays are list-like objects whose prototype has methods to perform traversal and mutation operations. Neither the length of a JavaScript array nor the types of its elements are fixed. Since an array's length can change at any time, and data can be stored at non-contiguous locations in the array, JavaScript arrays are not guaranteed to be dense; this depends on how the programmer chooses to use them. In general, these are convenient characteristics; but if these features are not desirable for your particular use, you might consider using typed arrays.</label>
+				    <textarea class="form-control" id="text-area-1" rows="3" placeholder="Enter Above Text"></textarea>
+				  </div>
+				  <div class="form-group">
+				  	<label for="text-area-2">Given a connected and undirected graph, a spanning tree of that graph is a subgraph that is a tree and connects all the vertices together. A single graph can have many different spanning trees. A minimum spanning tree (MST) or minimum weight spanning tree for a weighted, connected and undirected graph is a spanning tree with weight less than or equal to the weight of every other spanning tree. The weight of a spanning tree is the sum of weights given to each edge of the spanning tree.</label>
+				    <textarea class="form-control" id="text-area-2" rows="3" placeholder="Enter Above Text"></textarea>
+				  </div>
+				  <div class="form-group">
+				  	<label for="text-area-3">We have discussed Kruskal’s algorithm for Minimum Spanning Tree. Like Kruskal’s algorithm, Prim’s algorithm is also a Greedy algorithm. It starts with an empty spanning tree. The idea is to maintain two sets of vertices. The first set contains the vertices already included in the MST, the other set contains the vertices not yet included. At every step, it considers all the edges that connect the two sets, and picks the minimum weight edge from these edges. After picking the edge, it moves the other endpoint of the edge to the set containing MST.</label>
+				    <textarea class="form-control" id="text-area-3" rows="3" placeholder="Enter Above Text"></textarea>
+				  </div>
+				  <div class="form-group">
+				  	<label for="text-area-test">In statistics, homogeneity and its opposite, heterogeneity, arise in describing the properties of a dataset, or several datasets. They relate to the validity of the often convenient assumption that the statistical properties of any one part of an overall dataset are the same as any other part. In meta-analysis, which combines the data from several studies, homogeneity measures the differences or similarities between the several studies </label>
+				    <textarea class="form-control" id="text-area-test" rows="3" placeholder="Enter Above Text"></textarea>
+				  </div>
+				  <button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+		    </p>
+		  </div>
+		</div>
     </div>
   </body>
 </html>
