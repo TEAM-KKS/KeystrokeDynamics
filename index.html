@@ -17,7 +17,20 @@
   <body>
     <script type="text/javascript">
       $(document).ready(function () {
+      	
+      	function getUUID(){
+		    var dt = new Date().getTime();
+		    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		        var r = (dt + Math.random()*16)%16 | 0;
+		        dt = Math.floor(dt/16);
+		        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+		    });
+		    return uuid;
+		}
+
+      	var userId = getUUID();
         var eventCapture = new Array();
+
         var monitor = function(id) {
         	var keydowntimestamp;
 	        var keyuptimestamp;
@@ -49,6 +62,9 @@
 		        	}
 	        		var diff = new Date().getTime() - keydowntimestamp;
 	        		var event = {
+	        			"name": $("#name").val(),
+	        			"userId": userId, 
+	        			"deviceType": $("#device-select").val(),
 	        			"id": id, // Text Area
 	        			"keyPressed": e.key, // Key Name
 	        			"location": e.keyCode, // Key Code
@@ -56,7 +72,7 @@
 	        			"holdFor": diff, // Key hold down for
 	        			"longPressedEquivalent": keydowncount, // key long pressed equivalent for number of times that key has been pressed.
 	        			"platform": navigator.platform, // Get platform OS+Processor
-	        			"falseCharacter": falseCharacter
+	        			"falseCharacter": falseCharacter // Is the character entered correct or not.
 	        		};
 	        		console.log(event)
 	        		eventCapture.push(event)
@@ -90,30 +106,30 @@
 		    	<form id="dataset-form" method="POST">
 				  <div class="form-group">
 				    <label for="name">Name:</label>
-				    <input type="text" class="form-control" id="name" placeholder="Enter Name">
+				    <input type="text" class="form-control" id="name" placeholder="Enter Name" required>
 				  </div>
 				  <div class="form-group">
 				    <label for="device-select">Device Type:</label>
-				    <select class="form-control" id="device-select">
+				    <select class="form-control" id="device-select" required>
 						<option>Computer/Laptop</option>
 				    	<option>Mobile/Tab</option>
 				    </select>
 				  </div>
 				  <div class="form-group">
 				  	<label for="text-area-1" id="text-area-1-expected">Arrays are list-like objects whose prototype has methods to perform traversal and mutation operations. Neither the length of a JavaScript array nor the types of its elements are fixed. Since an array's length can change at any time, and data can be stored at non-contiguous locations in the array, JavaScript arrays are not guaranteed to be dense; this depends on how the programmer chooses to use them. In general, these are convenient characteristics; but if these features are not desirable for your particular use, you might consider using typed arrays.</label>
-				    <textarea class="form-control" id="text-area-1" rows="3" placeholder="Enter Above Text"></textarea>
+				    <textarea class="form-control" id="text-area-1" rows="3" placeholder="Enter Above Text" required></textarea>
 				  </div>
 				  <div class="form-group">
 				  	<label for="text-area-2" id="text-area-2-expected">Given a connected and undirected graph, a spanning tree of that graph is a subgraph that is a tree and connects all the vertices together. A single graph can have many different spanning trees. A minimum spanning tree (MST) or minimum weight spanning tree for a weighted, connected and undirected graph is a spanning tree with weight less than or equal to the weight of every other spanning tree. The weight of a spanning tree is the sum of weights given to each edge of the spanning tree.</label>
-				    <textarea class="form-control" id="text-area-2" rows="3" placeholder="Enter Above Text"></textarea>
+				    <textarea class="form-control" id="text-area-2" rows="3" placeholder="Enter Above Text" required></textarea>
 				  </div>
 				  <div class="form-group">
 				  	<label for="text-area-3" id="text-area-3-expected">We have discussed Kruskal’s algorithm for Minimum Spanning Tree. Like Kruskal’s algorithm, Prim’s algorithm is also a Greedy algorithm. It starts with an empty spanning tree. The idea is to maintain two sets of vertices. The first set contains the vertices already included in the MST, the other set contains the vertices not yet included. At every step, it considers all the edges that connect the two sets, and picks the minimum weight edge from these edges. After picking the edge, it moves the other endpoint of the edge to the set containing MST.</label>
-				    <textarea class="form-control" id="text-area-3" rows="3" placeholder="Enter Above Text"></textarea>
+				    <textarea class="form-control" id="text-area-3" rows="3" placeholder="Enter Above Text" required></textarea>
 				  </div>
 				  <div class="form-group">
 				  	<label for="text-area-test" id="text-area-test-expected">In statistics, homogeneity and its opposite, heterogeneity, arise in describing the properties of a dataset, or several datasets. They relate to the validity of the often convenient assumption that the statistical properties of any one part of an overall dataset are the same as any other part. In meta-analysis, which combines the data from several studies, homogeneity measures the differences or similarities between the several studies </label>
-				    <textarea class="form-control" id="text-area-test" rows="3" placeholder="Enter Above Text"></textarea>
+				    <textarea class="form-control" id="text-area-test" rows="3" placeholder="Enter Above Text" required></textarea>
 				  </div>
 				  <button type="submit" class="btn btn-primary">Submit</button>
 				</form>
