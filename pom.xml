@@ -24,7 +24,7 @@
 		<groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
           <configuration>
-              <mainClass>cs.usfca.edu.histfavcheckout.HistFavCheckout</mainClass>
+              <mainClass>cs.usfca.edu.ml.KeystrokeDynamics</mainClass>
           </configuration>
           <executions>
               <execution>
