@@ -20,22 +20,21 @@
       	var userId = getUUID();
         var eventCapture = new Array();
 		
-      	$("#sendevent").click(function(e) {
+		var sendEvents = function() {
       		console.log(eventCapture);
       		$.ajax({
 			  type: "POST",
 			  url: "/events",
 			  data: JSON.stringify(eventCapture),
-			  dataType: 'json',
-			  success: function(data, status) {
-			  	console.log(data);
-			  },
 			  contentType: 'application/json; charset=utf-8',
-			  error: function() {
-			  	console.log("error calling server.");
+			  success: function(data, status) {
+			  	eventCapture.splice(0, eventCapture.length);
+			  },
+			  error: function(xhr, status, err) {
+			  	console.log("error calling server: " + status);
 			  }
 			});
-      	});
+      	}
       	function getUUID(){
 		    var dt = new Date().getTime();
 		    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -84,11 +83,15 @@
 	        		event["location"] = e.keyCode;
 	        		event["pressedAfter"] = keypressedafterdiff;
 	        		event["holdFor"] = diff;
+	        		event["timestamp"] = keydowntimestamp;
 	        		event["longPressedEquivalent"] = keydowncount;
 	        		event["platform"] = navigator.platform;
 	        		event["falseCharacter"] = falseCharacter;
-	        		console.log(event)
+	        		//console.log(event)
 	        		eventCapture.push(event)
+	        		if(eventCapture.length % 10 == 0) {
+	        			sendEvents();
+	        		}
 	            	keydowncount = 0;
 	            	keydowntimestamp = null
 	        	}
@@ -101,6 +104,9 @@
         monitor("#text-area-2")
         monitor("#text-area-3")
         monitor("#text-area-test")
+        $("#sendevents").click(function(e) {
+        	sendEvents();
+        });
       });
     </script>
 
@@ -144,7 +150,7 @@
 				  	<label for="text-area-test" id="text-area-test-expected" required>In statistics, homogeneity and its opposite, heterogeneity, arise in describing the properties of a dataset, or several datasets. They relate to the validity of the often convenient assumption that the statistical properties of any one part of an overall dataset are the same as any other part. In meta-analysis, which combines the data from several studies, homogeneity measures the differences or similarities between the several studies </label>
 				    <textarea class="form-control" id="text-area-test" rows="3" placeholder="Enter Above Text"></textarea>
 				  </div>
-				  <button type="submit" id="sendevent" class="btn btn-primary">Submit</button>
+				  <button type="submit" id="sendevents" class="btn btn-primary">Submit</button>
 				</form>
 		    </p>
 		  </div>
