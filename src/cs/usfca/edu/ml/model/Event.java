@@ -27,6 +27,7 @@ public class Event implements Serializable {
 	private int longPressedEquivalent;
 	private String platform;
 	private boolean falseCharacter;
+	private int timestamp;
 	
 	public Event() {}
 	
@@ -147,6 +148,14 @@ public class Event implements Serializable {
 
 	public void setFalseCharacter(boolean falseCharacter) {
 		this.falseCharacter = falseCharacter;
+	}
+	
+	public void setTimestamp(int timestamp) {
+		this.timestamp = timestamp;
+	}
+	
+	public int getTimestamp() {
+		return timestamp;
 	}
 	
 }
